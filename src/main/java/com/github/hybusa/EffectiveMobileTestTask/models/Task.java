@@ -1,11 +1,13 @@
 package com.github.hybusa.EffectiveMobileTestTask.models;
 
+import com.github.hybusa.EffectiveMobileTestTask.dto.TaskDto;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Priority;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -42,4 +44,12 @@ public class Task {
             fetch = FetchType.LAZY
     )
     List<Comment> comments;
+
+    public Task(User user, TaskDto taskDto) {
+        this.author = user;
+        this.title = taskDto.getTitle();
+        this.description = taskDto.getDescription();
+        this.priority = taskDto.getPriority();
+        this.status = taskDto.getStatus();
+    }
 }
