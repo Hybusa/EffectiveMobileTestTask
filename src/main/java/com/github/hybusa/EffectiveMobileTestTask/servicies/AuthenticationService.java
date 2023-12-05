@@ -31,11 +31,9 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    public JwtAuthenticationResponse signup(SignUpRequest request) {
+    public JwtAuthenticationResponse signUp(SignUpRequest request) {
         var user = User
                 .builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ROLE_USER)
@@ -47,7 +45,7 @@ public class AuthenticationService {
     }
 
 
-    public JwtAuthenticationResponse signin(SignInRequest request) {
+    public JwtAuthenticationResponse signIn(SignInRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         var user = userRepository.findByEmail(request.getEmail())

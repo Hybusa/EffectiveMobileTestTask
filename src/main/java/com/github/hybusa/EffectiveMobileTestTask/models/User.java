@@ -29,10 +29,6 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String firstName;
-
-    String lastName;
-
     @Column(unique = true)
     String email;
 
@@ -45,7 +41,13 @@ public class User implements UserDetails {
 
     LocalDateTime updatedAt;
 
-    @OneToMany
+    @OneToMany(
+            mappedBy = "author",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @ToString.Exclude
     List<Task> tasks;
 
     @Override

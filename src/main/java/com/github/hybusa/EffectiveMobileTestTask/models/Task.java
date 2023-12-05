@@ -5,6 +5,8 @@ import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,5 +28,18 @@ public class Task {
     Priority priority;
 
     @ManyToOne
-    User user;
+    @JoinColumn(name = "author_id", nullable = false)
+    User author;
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_id", nullable = false)
+    User assigned;
+
+    @OneToMany(
+            mappedBy = "task",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    List<Comment> comments;
 }

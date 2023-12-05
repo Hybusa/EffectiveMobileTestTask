@@ -1,13 +1,12 @@
 package com.github.hybusa.EffectiveMobileTestTask.servicies;
 
-import java.time.LocalDateTime;
-
 import com.github.hybusa.EffectiveMobileTestTask.models.User;
 import com.github.hybusa.EffectiveMobileTestTask.repositories.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 
 
@@ -21,13 +20,8 @@ public class UserService {
     }
 
     public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) {
-                return userRepository.findByEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            }
-        };
+        return username -> userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public User save(User newUser) {
