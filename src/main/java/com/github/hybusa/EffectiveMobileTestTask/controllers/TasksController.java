@@ -1,6 +1,8 @@
 package com.github.hybusa.EffectiveMobileTestTask.controllers;
 
 import com.github.hybusa.EffectiveMobileTestTask.dto.TaskDto;
+import com.github.hybusa.EffectiveMobileTestTask.dto.TasksWrapper;
+import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
 import com.github.hybusa.EffectiveMobileTestTask.servicies.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,10 +21,56 @@ public class TasksController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task){
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task) {
         return ResponseEntity.ok(taskService.createTask(
                 SecurityContextHolder.getContext().getAuthentication().getName(),
                 task
         ));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto task, @PathVariable Long id) {
+        Optional<TaskDto> response = taskService.updateTask(task, id);
+        return response.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
+        if (taskService.deleteTask(id)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("updateStatus/{id}")
+    public ResponseEntity<TaskDto> updateTaskStatus(@RequestBody Status status, @PathVariable Long id) {
+        Optional<TaskDto> taskDtoOptional = taskService.updateStatus(id, status);
+        return taskDtoOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<TasksWrapper> getUserTasksWithCommentsByPage(@RequestParam("page") Integer pageNumber,
+                                                                       @RequestParam("size") Integer pageSize,
+                                                                       @PathVariable Long userId) {
+        Optional<TasksWrapper> tasksWrapperOptional = taskService.getUserTasksWithCommentsByPage(
+                pageNumber,
+                pageSize,
+                userId
+        );
+        return tasksWrapperOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/assigned/{assignedId}")
+    public ResponseEntity<TasksWrapper> getAssignedTasksWithCommentsByPage(@RequestParam("page") Integer pageNumber,
+                                                                           @RequestParam("size") Integer pageSize,
+                                                                           @PathVariable Long assignedId) {
+        Optional<TasksWrapper> tasksWrapperOptional = taskService.getUserTasksWithCommentsByPage(
+                pageNumber,
+                pageSize,
+                assignedId
+        );
+        return tasksWrapperOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 }

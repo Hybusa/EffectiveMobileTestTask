@@ -1,9 +1,12 @@
 package com.github.hybusa.EffectiveMobileTestTask.mapper;
 
 import com.github.hybusa.EffectiveMobileTestTask.dto.TaskDto;
-import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
+import com.github.hybusa.EffectiveMobileTestTask.dto.TasksWrapper;
 import com.github.hybusa.EffectiveMobileTestTask.models.Task;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
@@ -16,4 +19,11 @@ public interface TaskMapper {
         task.setPriority(taskDto.getPriority());
         return task;
     }
+
+    @Mapping(expression = "java(results.size())", target = "count")
+    default TasksWrapper tasksToTasksWrapper(List<Task> results){
+        return tasksCounter(results.size(),results);
+    }
+
+    TasksWrapper tasksCounter(int count, List<Task> results);
 }
