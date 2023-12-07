@@ -32,7 +32,7 @@ public class TaskService {
     }
 
     private User getUser(String email) {
-        Optional<User> userOptional = userService.getUserByEmail(email);
+        Optional<User> userOptional = userService.getUserByLogin(email);
         if(userOptional.isEmpty()) {
             throw new UserNotFoundException("User not found!");
         }
@@ -111,5 +111,7 @@ public class TaskService {
         return taskRepository.findById(id).map(t -> t.getAuthor().getLogin()).orElse("");
     }
 
-
+    public Optional<Task> getTaskById(Long taskId) {
+        return taskRepository.findById(taskId);
+    }
 }

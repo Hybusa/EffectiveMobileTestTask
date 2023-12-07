@@ -33,7 +33,7 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public Optional<User> getUserByEmail(String login) {
+    public Optional<User> getUserByLogin(String login) {
         return userRepository.findByLogin(login);
     }
 
