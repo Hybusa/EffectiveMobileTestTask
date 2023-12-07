@@ -1,6 +1,6 @@
 package com.github.hybusa.EffectiveMobileTestTask.models;
 
-import com.github.hybusa.EffectiveMobileTestTask.dto.TaskDto;
+import com.github.hybusa.EffectiveMobileTestTask.dto.PostTaskDto;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Priority;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
 import jakarta.persistence.*;
@@ -20,6 +20,7 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
     private String description;
 
@@ -45,11 +46,11 @@ public class Task {
     )
     private Collection<Comment> comments;
 
-    public Task(User user, TaskDto taskDto) {
+    public Task(User user, PostTaskDto postTaskDto) {
         this.author = user;
-        this.title = taskDto.getTitle();
-        this.description = taskDto.getDescription();
-        this.priority = taskDto.getPriority();
-        this.status = taskDto.getStatus();
+        this.title = postTaskDto.getTitle();
+        this.description = postTaskDto.getDescription();
+        this.priority = postTaskDto.getPriority();
+        this.status = postTaskDto.getStatus();
     }
 }

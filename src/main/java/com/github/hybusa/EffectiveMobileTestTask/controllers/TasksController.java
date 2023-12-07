@@ -1,8 +1,10 @@
 package com.github.hybusa.EffectiveMobileTestTask.controllers;
 
+import com.github.hybusa.EffectiveMobileTestTask.dto.PostTaskDto;
 import com.github.hybusa.EffectiveMobileTestTask.dto.TaskDto;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
 import com.github.hybusa.EffectiveMobileTestTask.servicies.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,7 @@ public class TasksController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task) {
+    public ResponseEntity<TaskDto> createTask(@Valid @RequestBody PostTaskDto task) {
         return ResponseEntity.ok(taskService.createTask(
                 SecurityContextHolder.getContext().getAuthentication().getName(),
                 task
@@ -29,7 +31,7 @@ public class TasksController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto task, @PathVariable Long id) {
+    public ResponseEntity<TaskDto> updateTask(@Valid @RequestBody TaskDto task, @PathVariable Long id) {
         Optional<TaskDto> response = taskService.updateTask(task, id);
         return response.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -43,7 +45,7 @@ public class TasksController {
     }
 
     @PatchMapping("updateStatus/{id}")
-    public ResponseEntity<TaskDto> updateTaskStatus(@RequestBody Status status, @PathVariable Long id) {
+    public ResponseEntity<TaskDto> updateTaskStatus(@Valid @RequestBody Status status, @PathVariable Long id) {
         Optional<TaskDto> taskDtoOptional = taskService.updateStatus(id, status);
         return taskDtoOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

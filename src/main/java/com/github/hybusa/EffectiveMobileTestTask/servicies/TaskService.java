@@ -1,5 +1,6 @@
 package com.github.hybusa.EffectiveMobileTestTask.servicies;
 
+import com.github.hybusa.EffectiveMobileTestTask.dto.PostTaskDto;
 import com.github.hybusa.EffectiveMobileTestTask.dto.TaskDto;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
 import com.github.hybusa.EffectiveMobileTestTask.exceptions.UserNotFoundException;
@@ -26,7 +27,7 @@ public class TaskService {
         this.userService = userService;
     }
 
-    public TaskDto createTask(String email, TaskDto task) {
+    public TaskDto createTask(String email, PostTaskDto task) {
         return taskMapper.taskToTaskDto(taskRepository.save(new Task(getUser(email), task)));
     }
 

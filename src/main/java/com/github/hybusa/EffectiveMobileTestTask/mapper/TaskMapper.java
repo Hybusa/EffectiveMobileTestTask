@@ -13,8 +13,8 @@ import java.util.List;
 public interface TaskMapper {
 
 
-    @Mapping(source = "author.email", target = "author")
-    @Mapping(source = "assigned.email", target = "assigned")
+    @Mapping(source = "author.login", target = "author")
+    @Mapping(source = "assigned.login", target = "assigned")
     TaskDto taskToTaskDto(Task task);
 
     default Task taskDtoToTask(Task task, TaskDto taskDto) {
@@ -27,6 +27,6 @@ public interface TaskMapper {
 
     List<TaskDto> listMap(List<Task> tasks);
 
-    @Mapping(source = "author.email", target = "author")
+    @Mapping(source = "author.login", target = "author")
     CommentDto commentToCommentDto(Comment comment);
 }
