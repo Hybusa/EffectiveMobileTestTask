@@ -1,9 +1,13 @@
 package com.github.hybusa.EffectiveMobileTestTask.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -12,13 +16,14 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    String text;
+    private String text;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
-    User author;
+    private User author;
 
     @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)
-    Task task;
+    @JsonIgnore
+    private Task task;
 }

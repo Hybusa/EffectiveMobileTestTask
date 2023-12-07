@@ -6,44 +6,44 @@ import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Collection;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@ToString
 @Table(name = "tasks")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String title;
-    String description;
+    private Long id;
+    private String title;
+    private String description;
 
     @Enumerated(EnumType.STRING)
-    Status status;
+    private Status status;
 
     @Enumerated(EnumType.STRING)
-    Priority priority;
+    private Priority priority;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
-    User author;
+    private User author;
 
     @ManyToOne
-    @JoinColumn(name = "assigned_id", nullable = false)
-    User assigned;
+    @JoinColumn(name = "assigned_id")
+    private User assigned;
 
     @OneToMany(
             mappedBy = "task",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
-    List<Comment> comments;
+    private Collection<Comment> comments;
 
     public Task(User user, TaskDto taskDto) {
         this.author = user;

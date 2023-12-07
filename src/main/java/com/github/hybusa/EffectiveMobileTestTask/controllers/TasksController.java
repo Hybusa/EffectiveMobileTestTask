@@ -1,13 +1,13 @@
 package com.github.hybusa.EffectiveMobileTestTask.controllers;
 
 import com.github.hybusa.EffectiveMobileTestTask.dto.TaskDto;
-import com.github.hybusa.EffectiveMobileTestTask.dto.TasksWrapper;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
 import com.github.hybusa.EffectiveMobileTestTask.servicies.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,10 +50,10 @@ public class TasksController {
 
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<TasksWrapper> getUserTasksWithCommentsByPage(@RequestParam("page") Integer pageNumber,
+    public ResponseEntity<List<TaskDto>> getUserTasksWithCommentsByPage(@RequestParam("page") Integer pageNumber,
                                                                        @RequestParam("size") Integer pageSize,
                                                                        @PathVariable Long userId) {
-        Optional<TasksWrapper> tasksWrapperOptional = taskService.getUserTasksWithCommentsByPage(
+        Optional<List<TaskDto>> tasksWrapperOptional = taskService.getUserTasksWithCommentsByPage(
                 pageNumber,
                 pageSize,
                 userId
@@ -62,10 +62,10 @@ public class TasksController {
     }
 
     @GetMapping("/assigned/{assignedId}")
-    public ResponseEntity<TasksWrapper> getAssignedTasksWithCommentsByPage(@RequestParam("page") Integer pageNumber,
+    public ResponseEntity<List<TaskDto>> getAssignedTasksWithCommentsByPage(@RequestParam("page") Integer pageNumber,
                                                                            @RequestParam("size") Integer pageSize,
                                                                            @PathVariable Long assignedId) {
-        Optional<TasksWrapper> tasksWrapperOptional = taskService.getUserTasksWithCommentsByPage(
+        Optional<List<TaskDto>> tasksWrapperOptional = taskService.getAssignedTasksWithCommentsByPage(
                 pageNumber,
                 pageSize,
                 assignedId

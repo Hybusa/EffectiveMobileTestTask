@@ -20,7 +20,7 @@ public class UserService {
     }
 
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
+        return username -> userRepository.findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
@@ -33,8 +33,8 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Optional<User> getUserByEmail(String login) {
+        return userRepository.findByLogin(login);
     }
 
     public Optional<User> getUserById(Long userId) {

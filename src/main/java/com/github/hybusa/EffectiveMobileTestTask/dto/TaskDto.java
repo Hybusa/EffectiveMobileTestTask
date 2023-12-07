@@ -4,18 +4,30 @@ import com.github.hybusa.EffectiveMobileTestTask.enums.Priority;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.Data;
+import lombok.*;
 
-@Data
+import java.util.Collection;
+
+@Getter
+@Setter
+@RequiredArgsConstructor
+@EqualsAndHashCode
 public class TaskDto {
 
-    String title;
+    private Long id;
 
-    String description;
+    private String title;
+
+    private String description;
 
     @Enumerated(EnumType.STRING)
-    Status status;
+    private Status status;
 
     @Enumerated(EnumType.STRING)
-    Priority priority;
+    private Priority priority;
+
+    private String author;
+    private String assigned;
+
+    private Collection<CommentDto> comments;
 }

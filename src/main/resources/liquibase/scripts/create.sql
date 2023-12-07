@@ -4,7 +4,7 @@
 CREATE TABLE users
 (
     id         BIGSERIAL PRIMARY KEY,
-    email      VARCHAR(64) UNIQUE NOT NULL,
+    login      VARCHAR(64) UNIQUE NOT NULL,
     password   VARCHAR(64) NOT NULL,
     role       varchar(16) NOT NULL,
     created_at TIMESTAMP NOT NULL,

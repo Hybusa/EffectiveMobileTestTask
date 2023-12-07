@@ -6,6 +6,8 @@ import com.github.hybusa.EffectiveMobileTestTask.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+    Optional<User> findByLogin(String login);
+
+    boolean existsByLogin(String login);
 
 }

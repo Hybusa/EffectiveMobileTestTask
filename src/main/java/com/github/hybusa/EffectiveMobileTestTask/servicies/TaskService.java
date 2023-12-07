@@ -1,8 +1,8 @@
 package com.github.hybusa.EffectiveMobileTestTask.servicies;
 
 import com.github.hybusa.EffectiveMobileTestTask.dto.TaskDto;
-import com.github.hybusa.EffectiveMobileTestTask.dto.TasksWrapper;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
+import com.github.hybusa.EffectiveMobileTestTask.exceptions.UserNotFoundException;
 import com.github.hybusa.EffectiveMobileTestTask.mapper.TaskMapper;
 import com.github.hybusa.EffectiveMobileTestTask.models.Task;
 import com.github.hybusa.EffectiveMobileTestTask.models.User;
@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,7 +33,7 @@ public class TaskService {
     private User getUser(String email) {
         Optional<User> userOptional = userService.getUserByEmail(email);
         if(userOptional.isEmpty()) {
-            throw new RuntimeException("User not found!");
+            throw new UserNotFoundException("User not found!");
         }
         return userOptional.get();
     }
@@ -68,25 +69,45 @@ public class TaskService {
         return Optional.of(taskMapper.taskToTaskDto(task));
     }
 
-    public Optional<TasksWrapper> getUserTasksWithCommentsByPage(Integer pageNumber, Integer pageSize, Long userId) {
-        Optional<User> userOptional = userService.getUserById(userId);
+    public Optional<List<TaskDto>> getUserTasksWithCommentsByPage(Integer pageNumber, Integer pageSize, Long authorId) {
+        Optional<User> userOptional = userService.getUserById(authorId);
         if(userOptional.isEmpty()){
             return Optional.empty();
         }
 
         PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
 
-        return Optional.of(taskMapper.tasksToTasksWrapper(taskRepository.findAll(pageRequest).getContent()));
+        return Optional.of(taskMapper.listMap(taskRepository.findByAuthorId(authorId,pageRequest).getContent()));
+    }
+
+    public Optional<List<TaskDto>> getAssignedTasksWithCommentsByPage(Integer pageNumber, Integer pageSize, Long assignedId) {
+        Optional<User> userOptional = userService.getUserById(assignedId);
+        if(userOptional.isEmpty()){
+            return Optional.empty();
+        }
+
+        PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
+
+        return Optional.of(taskMapper.listMap(taskRepository.findByAssignedId(assignedId,pageRequest).getContent()));
     }
 
 
     public String getTaskAssignedNameById(Long id){
-        return taskRepository.findById(id).map(t -> t.getAssigned().getEmail()).orElseThrow(RuntimeException::new);
+        Optional<Task> taskOptional = taskRepository.findById(id);
+        if(taskOptional.isEmpty()){
+            return null;
+        }
+        User assigned = taskOptional.get().getAssigned();
+        if(assigned == null){
+            return null;
+        }
+
+        return assigned.getUsername();
     }
 
 
     public String getTaskAuthorNameById(Long id){
-        return taskRepository.findById(id).map(t -> t.getAuthor().getEmail()).orElseThrow(RuntimeException::new);
+        return taskRepository.findById(id).map(t -> t.getAuthor().getLogin()).orElse("");
     }
 
 

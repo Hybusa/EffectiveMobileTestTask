@@ -3,6 +3,7 @@ import com.github.hybusa.EffectiveMobileTestTask.dto.JwtAuthenticationResponse;
 import com.github.hybusa.EffectiveMobileTestTask.dto.SignInRequest;
 import com.github.hybusa.EffectiveMobileTestTask.dto.SignUpRequest;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Role;
+import com.github.hybusa.EffectiveMobileTestTask.exceptions.LoginAlreadyExists;
 import com.github.hybusa.EffectiveMobileTestTask.models.User;
 import com.github.hybusa.EffectiveMobileTestTask.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,25 +33,28 @@ public class AuthenticationService {
     }
 
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
-        var user = User
+        if(userRepository.existsByLogin(request.getLogin())){
+            throw new LoginAlreadyExists("There is a user with this Login");
+        }
+        User user = User
                 .builder()
-                .email(request.getEmail())
+                .login(request.getLogin())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ROLE_USER)
                 .build();
 
         user = userService.save(user);
-        var jwt = jwtService.generateToken(user);
+        String jwt = jwtService.generateToken(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 
 
     public JwtAuthenticationResponse signIn(SignInRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = userRepository.findByEmail(request.getEmail())
+                new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword()));
+        User user = userRepository.findByLogin(request.getLogin())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
-        var jwt = jwtService.generateToken(user);
+        String jwt = jwtService.generateToken(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 

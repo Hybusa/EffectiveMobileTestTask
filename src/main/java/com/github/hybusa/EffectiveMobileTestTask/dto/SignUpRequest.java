@@ -1,17 +1,14 @@
 package com.github.hybusa.EffectiveMobileTestTask.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpRequest {
-    String firstName;
-    String lastName;
-    String email;
+    String login;
     String password;
 }
