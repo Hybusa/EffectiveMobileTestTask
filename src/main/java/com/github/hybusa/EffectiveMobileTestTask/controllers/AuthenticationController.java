@@ -29,4 +29,6 @@ public class AuthenticationController {
     public JwtAuthenticationResponse signIn(@Valid @RequestBody SignInRequest request) {
         return authenticationService.signIn(request);
     }
+
+
 }

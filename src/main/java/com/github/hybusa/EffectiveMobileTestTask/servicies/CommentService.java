@@ -21,7 +21,6 @@ public class CommentService {
         this.userService = userService;
     }
 
-
     public Optional<Comment> createComment(PostCommentDto postComment, Long taskId, String name) {
         Optional<Task>  taskOptional = taskService.getTaskById(taskId);
         if(taskOptional.isEmpty()){
