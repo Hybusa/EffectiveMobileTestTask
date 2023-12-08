@@ -1,7 +1,7 @@
 package com.github.hybusa.EffectiveMobileTestTask.controllers;
 
+import com.github.hybusa.EffectiveMobileTestTask.dto.CommentDto;
 import com.github.hybusa.EffectiveMobileTestTask.dto.PostCommentDto;
-import com.github.hybusa.EffectiveMobileTestTask.models.Comment;
 import com.github.hybusa.EffectiveMobileTestTask.servicies.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,9 +36,9 @@ public class CommentController {
             }
     )
     @PostMapping("{taskId}")
-    public ResponseEntity<Comment> postComment(@Valid @RequestBody PostCommentDto postComment,
+    public ResponseEntity<CommentDto> postComment(@Valid @RequestBody PostCommentDto postComment,
                                                   @PathVariable Long taskId) {
-        Optional<Comment> commentOptional =  commentService.createComment(
+        Optional<CommentDto> commentOptional =  commentService.createComment(
                 postComment,
                 taskId,
                 SecurityContextHolder.getContext().getAuthentication().getName());

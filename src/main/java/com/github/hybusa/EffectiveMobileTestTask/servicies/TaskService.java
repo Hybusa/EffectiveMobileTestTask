@@ -3,6 +3,7 @@ package com.github.hybusa.EffectiveMobileTestTask.servicies;
 import com.github.hybusa.EffectiveMobileTestTask.dto.PostTaskDto;
 import com.github.hybusa.EffectiveMobileTestTask.dto.TaskDto;
 import com.github.hybusa.EffectiveMobileTestTask.enums.Status;
+import com.github.hybusa.EffectiveMobileTestTask.exceptions.TaskNotFoundException;
 import com.github.hybusa.EffectiveMobileTestTask.exceptions.UserNotFoundException;
 import com.github.hybusa.EffectiveMobileTestTask.mapper.TaskMapper;
 import com.github.hybusa.EffectiveMobileTestTask.models.Task;
@@ -96,19 +97,18 @@ public class TaskService {
     public String getTaskAssignedNameById(Long id){
         Optional<Task> taskOptional = taskRepository.findById(id);
         if(taskOptional.isEmpty()){
-            return null;
+            throw new TaskNotFoundException("There is no such task");
         }
         User assigned = taskOptional.get().getAssigned();
         if(assigned == null){
-            return null;
+            throw new UserNotFoundException("There is no-one assigned for this task");
         }
-
         return assigned.getUsername();
     }
 
 
     public String getTaskAuthorNameById(Long id){
-        return taskRepository.findById(id).map(t -> t.getAuthor().getLogin()).orElse("");
+        return taskRepository.findById(id).map(t -> t.getAuthor().getLogin()).orElseThrow(TaskNotFoundException::new);
     }
 
     public Optional<Task> getTaskById(Long taskId) {
