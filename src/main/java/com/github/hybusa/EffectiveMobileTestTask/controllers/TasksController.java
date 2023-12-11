@@ -63,6 +63,7 @@ public class TasksController {
         Optional<TaskDto> response = taskService.updateTask(task, id);
         return response.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @Operation(
             summary = "Delete a task", tags = "Task",
             responses = {
@@ -118,14 +119,16 @@ public class TasksController {
     )
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<TaskDto>> getUserTasksWithCommentsByPage(@RequestParam("page") Integer pageNumber,
-                                                                       @RequestParam("size") Integer pageSize,
-                                                                       @PathVariable Long userId) {
-        Optional<List<TaskDto>> tasksWrapperOptional = taskService.getUserTasksWithCommentsByPage(
-                pageNumber,
-                pageSize,
-                userId
+                                                                        @RequestParam("size") Integer pageSize,
+                                                                        @PathVariable Long userId) {
+        return ResponseEntity.of(
+                taskService.getUserTasksWithCommentsByPage(
+                        pageNumber,
+                        pageSize,
+                        userId
+                )
         );
-        return tasksWrapperOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
     @Operation(
@@ -142,14 +145,14 @@ public class TasksController {
     )
     @GetMapping("/assigned/{assignedId}")
     public ResponseEntity<List<TaskDto>> getAssignedTasksWithCommentsByPage(@RequestParam("page") Integer pageNumber,
-                                                                           @RequestParam("size") Integer pageSize,
-                                                                           @PathVariable Long assignedId) {
-        Optional<List<TaskDto>> tasksWrapperOptional = taskService.getAssignedTasksWithCommentsByPage(
-                pageNumber,
-                pageSize,
-                assignedId
+                                                                            @RequestParam("size") Integer pageSize,
+                                                                            @PathVariable Long assignedId) {
+        return ResponseEntity.of(
+                taskService.getAssignedTasksWithCommentsByPage(
+                        pageNumber,
+                        pageSize,
+                        assignedId
+                )
         );
-        return tasksWrapperOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-
     }
 }

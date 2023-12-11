@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/comment")
@@ -38,10 +37,11 @@ public class CommentController {
     @PostMapping("{taskId}")
     public ResponseEntity<CommentDto> postComment(@Valid @RequestBody PostCommentDto postComment,
                                                   @PathVariable Long taskId) {
-        Optional<CommentDto> commentOptional =  commentService.createComment(
+
+        return ResponseEntity.of(commentService.createComment(
                 postComment,
                 taskId,
-                SecurityContextHolder.getContext().getAuthentication().getName());
-        return commentOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+                SecurityContextHolder.getContext().getAuthentication().getName())
+        );
     }
 }

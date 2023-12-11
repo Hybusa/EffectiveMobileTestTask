@@ -7,11 +7,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=postgres
+      - SPRING_PROFILES_ACTIVE=test
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dockerdb
       - SPRING_DATASOURCE_USERNAME = dockeruser
       - SPRING_DATASOURCE_PASSWORD = dockerpassword
-      - SPRING_JPA_HIBERNATE_DDL-AUTO= VALIDATE
       - TOKEN_SECRET_KEY=
       - TOKEN_EXPIRATIONS=
 
